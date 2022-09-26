@@ -25,6 +25,24 @@ class DatabaseService{
   getUserGroups() async{
     return await userCollection.doc(userID).snapshots();
   }
+  createRequest(String fullName, String userId,String location,String mobileNo,String group)async{
+    DocumentReference documentReference = await groupCollection.add({
+      "location": location,
+      'mobileNo': mobileNo,
+      'group':group,
+      "requestedBy":"${fullName}_$userID",
+      'name':fullName,
+      "requestId": ""
+
+    });
+    await documentReference.update({
+      "requestId": documentReference.id,
+    });
+    DocumentReference userDocumentReference =  await userCollection.doc(userID);
+    return await userDocumentReference.update({
+      'groups': FieldValue.arrayUnion(["${documentReference.id}"])
+    });
+  }
 
 
 }
