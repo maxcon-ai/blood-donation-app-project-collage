@@ -1,3 +1,4 @@
+import 'package:blood_donation/screen/info-page.dart';
 import 'package:blood_donation/screen/login_screen.dart';
 import 'package:blood_donation/screen/home.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Card(
               child: ListTile(
+                onTap: (){
+                  Get.to(TeamInfo());
+                },
                 leading: Icon(Icons.info_outline_rounded),
                 title: Text("Info"),
               ),

@@ -43,6 +43,7 @@ dependencies:
   cloud_firestore: ^3.4.9
   shared_preferences: ^2.0.15
   snippet_coder_utils: ^1.0.12
+  url_launcher: ^6.1.5
 
 
 

@@ -1,3 +1,4 @@
+import 'package:blood_donation/screen/info-page.dart';
 import 'package:blood_donation/screen/profile_page.dart';
 import 'package:blood_donation/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -204,6 +205,9 @@ class _HomeState extends State<Home> {
           ),
           Card(
             child: ListTile(
+              onTap: (){
+                Get.to(TeamInfo());
+              },
               leading: Icon(Icons.info_outline_rounded),
               title: Text("Info"),
             ),
