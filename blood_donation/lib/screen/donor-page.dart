@@ -1,7 +1,7 @@
-import 'package:blood_donation/screen/donor-page.dart';
+import 'package:blood_donation/screen/blog-page.dart';
+import 'package:blood_donation/screen/home.dart';
 import 'package:blood_donation/screen/info-page.dart';
 import 'package:blood_donation/screen/profile_page.dart';
-import 'package:blood_donation/screen/request-page.dart';
 import 'package:blood_donation/widgets/groupTileWidget.dart';
 import 'package:blood_donation/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,17 +13,16 @@ import 'package:google_fonts/google_fonts.dart';
 import '../helper/helper_function.dart';
 import '../services/auth_services.dart';
 import '../services/database_service.dart';
-import 'blog-page.dart';
 import 'login_screen.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class DonorInfo extends StatefulWidget {
+  const DonorInfo({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<DonorInfo> createState() => _DonorInfoState();
 }
 
-class _HomeState extends State<Home> {
+class _DonorInfoState extends State<DonorInfo> {
   bool _isloading = false;
   String userName = "";
   String email = '';
@@ -54,11 +53,11 @@ class _HomeState extends State<Home> {
 
   gettingUserData() async {
     await HelperFunctions.getUserEmailSF().then((value) => (setState(() {
-          email = value!;
-        })));
+      email = value!;
+    })));
     await HelperFunctions.getUserNameSF().then((value) => (setState(() {
-          userName = value!;
-        })));
+      userName = value!;
+    })));
     await DatabaseService(FirebaseAuth.instance.currentUser!.uid)
         .getUserGroups()
         .then((snapshot) {
@@ -82,7 +81,27 @@ class _HomeState extends State<Home> {
         elevation: 0,
       ),
       body: Container(
-        child: groupList(),
+        child: ListView.builder(
+            itemCount: 30,
+            itemBuilder: (context,index){
+              return Card(
+                child: ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Requested by Avijit $index"),
+                      Container(
+                          padding: EdgeInsets.all(5),
+                          color: Colors.red[300],
+                          child: Text("O+"))
+                    ],
+                  ),
+                  subtitle: Text("Age : 24"),
+                  leading: IconButton(onPressed: (){}, icon: Icon(Icons.call)),
+
+                ),
+              );
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Make a request",
@@ -107,29 +126,27 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.home,
-                color: Colors.white,
-              ),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.people_alt_outlined,
+                Icons.home_outlined,
                 color: Colors.white,
               ),
               onPressed: () {
-                Get.off(RequestBlood());
+                Get.off(Home());
               },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.people_alt,
+                color: Colors.white,
+              ),
+              onPressed: () {},
             ),
             SizedBox(
               width: 15,
             ),
             IconButton(
-              icon:Image.asset("assets/logo/blood-icon.png",
-                  width: 24, color: Colors.grey),
-              onPressed: () {
-                Get.off(DonorInfo());
-              },
+              icon: Image.asset("assets/logo/blood-icon.png",
+                  width: 24, color: Colors.white),
+              onPressed: () {},
             ),
             IconButton(
               icon: Icon(
@@ -240,7 +257,7 @@ class _HomeState extends State<Home> {
                         ElevatedButton(
                           onPressed: () {
                             authService.signOut().whenComplete(
-                                () => (Get.offAll(LoginScreen())));
+                                    () => (Get.offAll(LoginScreen())));
                           },
                           child: Text("Confirm"),
                           style: ElevatedButton.styleFrom(
@@ -270,69 +287,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  groupList() {
-    return StreamBuilder(
-      stream: groups,
-      builder: (context, AsyncSnapshot snapshot) {
-        // make some checks
-        if (snapshot.hasData) {
-          if (snapshot.data['groups'] != null) {
-            if (snapshot.data['groups'].length != 0) {
-              return ListView.builder(
-                  itemCount: snapshot.data["groups"].length,
-                  itemBuilder: (context,index){
-                    return Card(
-                      child: ListTile(
-                        title: Text(userName),
-                        subtitle: Text(snapshot.data['groups'][index]),
-                      ),
-                    );
-                  });
-            } else {
-              return noGroupWidget();
-            }
-          } else {
-            return noGroupWidget();
-          }
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-                color: Theme.of(context).primaryColor),
-          );
-        }
-      },
-    );
-  }
-
-  noGroupWidget() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () {
-              popUpDialog();
-            },
-            child: Icon(
-              Icons.add_circle,
-              color: Colors.grey[700],
-              size: 75,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "You've not make any request, tap on the add icon to make a request.",
-            textAlign: TextAlign.center,
-          )
-        ],
-      ),
-    );
-  }
-
   popUpDialog() {
     Get.defaultDialog(
         barrierDismissible: true,
@@ -343,65 +297,65 @@ class _HomeState extends State<Home> {
           children: [
             _isloading == true
                 ? Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
+              child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ),
+            )
                 : Column(
-                    children: [
-                      TextFormField(
-                        onChanged: (val) {
+              children: [
+                TextFormField(
+                  onChanged: (val) {
+                    setState(() {
+                      location = val;
+                    });
+                  },
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  //Normal textInputField will be displayed
+                  maxLines: 3,
+                  // when user presses enter it will adapt to it
+                  decoration: InputDecoration(
+                    labelText: "Location",
+                  ),
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Mobile No"),
+                  onChanged: (val) {
+                    mobile = val;
+                  },
+                ),
+                Row(
+                  children: [
+                    Expanded(child: Text("Groups")),
+                    Expanded(
+                      child: DropdownButton(
+                        // Initial Value
+                        value: dropdownvalue,
+
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
+
+                        // Array list of items
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
                           setState(() {
-                            location = val;
+                            dropdownvalue = newValue!;
+                            print(dropdownvalue);
                           });
                         },
-                        keyboardType: TextInputType.multiline,
-                        minLines: 3,
-                        //Normal textInputField will be displayed
-                        maxLines: 3,
-                        // when user presses enter it will adapt to it
-                        decoration: InputDecoration(
-                          labelText: "Location",
-                        ),
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(labelText: "Mobile No"),
-                        onChanged: (val) {
-                          mobile = val;
-                        },
-                      ),
-                      Row(
-                        children: [
-                          Expanded(child: Text("Groups")),
-                          Expanded(
-                            child: DropdownButton(
-                              // Initial Value
-                              value: dropdownvalue,
-
-                              // Down Arrow Icon
-                              icon: const Icon(Icons.keyboard_arrow_down),
-
-                              // Array list of items
-                              items: items.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              // After selecting the desired option,it will
-                              // change button value to selected value
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue = newValue!;
-                                  print(dropdownvalue);
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ],
         ),
         actions: [
@@ -425,15 +379,16 @@ class _HomeState extends State<Home> {
                 });
                 DatabaseService(FirebaseAuth.instance.currentUser!.uid)
                     .createRequest(
-                        userName,
-                        FirebaseAuth.instance.currentUser!.uid,
-                        location,
-                        mobile,
-                        dropdownvalue) .whenComplete(() {
-                    _isloading = false;
+                    userName,
+                    FirebaseAuth.instance.currentUser!.uid,
+                    location,
+                    mobile,
+                    dropdownvalue) .whenComplete(() {
+                  _isloading = false;
                 });
                 Get.back();
                 Get.snackbar("Group Created successfully", "",backgroundColor: Colors.green[400]);
+                Get.to(Home());
               }
             },
             child: Text("Confirm"),

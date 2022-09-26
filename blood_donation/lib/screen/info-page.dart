@@ -1,3 +1,4 @@
+import 'package:blood_donation/screen/home.dart';
 import 'package:blood_donation/screen/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,41 +49,60 @@ class _TeamInfoState extends State<TeamInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      drawer: drawer(),
+      appBar: AppBar(
+        title: Text(
+          'Blood Donation',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontSize: 25),
+        ),
+        backgroundColor: Colors.red,
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
             children: [
+              SizedBox(height: 10,),
             buidProfile(
             profilePic:
             "https://shopnow.uuizard.com/wp-content/uploads/2022/08/IMG_20191129_130713.jpg",
             name: "Avijit Mondal (Team leader)",
             roll: "136067",
             profileLink: 'https://www.facebook.com/avijitmondalofficial3/'),
+              SizedBox(height: 10,),
         buidProfile(
             profilePic:
             "https://shopnow.uuizard.com/wp-content/uploads/2022/08/291857137_724649958798598_2590277084743523940_n.jpg",
             name: "Abdur Rahman",
             roll: "136073",
             profileLink: "https://www.facebook.com/ar.r.503"),
+              SizedBox(height: 10,),
         buidProfile(
             profilePic:
             "https://scontent.fcgp17-1.fna.fbcdn.net/v/t1.6435-9/156525897_958930591514007_1125907877766587274_n.jpg?stp=dst-jpg_s960x960&_nc_cat=101&ccb=1-7&_nc_sid=e3f864&_nc_ohc=Np7R7q7AVAYAX-Abloa&_nc_ht=scontent.fcgp17-1.fna&oh=00_AT9mk5_QRueH428PtftWSsvzzHBEFeJRW_NHLsYxN6N3kA&oe=635505DA",
             name: "Safayet Hossain",
             roll: "136071",
             profileLink: "https://www.facebook.com/s.136071"),
+              SizedBox(height: 10,),
         buidProfile(
           profilePic: "https://shopnow.uuizard.com/wp-content/uploads/2022/08/279180643_1413636052408630_8726274460623902676_n.jpg",
-          name: 'Mohammad Riaydul Islam', roll: "136075", profileLink: "https://www.facebook.com/s.136071"), 
+          name: 'Mohammad Riaydul Islam', roll: "136075", profileLink: "https://www.facebook.com/s.136071"),
+              SizedBox(height: 10,),
               buidProfile(profilePic: "https://shopnow.uuizard.com/wp-content/uploads/2022/08/297102404_1481182032320698_970767902359759956_n.jpg",
                   name: 'Jenifar Sadia', roll: "178981", profileLink: "https://www.facebook.com/100028051686320/"),
+              SizedBox(height: 10,),
               buidProfile(profilePic: "https://scontent.fcgp17-1.fna.fbcdn.net/v/t1.15752-9/275146950_331238478984731_4601549823637570835_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=ae9488&_nc_ohc=HzAFJc3Z2yEAX-TlKFc&_nc_ht=scontent.fcgp17-1.fna&oh=03_AVLxlZ563QdFG9x-rwhHNcB8nccxpgQKRI0KklZ9CAzniA&oe=63570358", name: "Dania Binte Rukaiya", roll: "136065", profileLink: ""),
+              SizedBox(height: 10,),
               buidProfile(profilePic: "https://shopnow.uuizard.com/wp-content/uploads/2022/08/50818587_652581308490970_2642086150457524224_n.jpg", name: "Mohammad Arifur Rahman", roll: "136051", profileLink: ""),
+              SizedBox(height: 10,),
               buidProfile(profilePic: "https://static-01.daraz.com.bd/p/6beb1c849ffcfdde52a446632446a045.jpg", name: "Eyesha Harun", roll: "136066", profileLink: ""),
+              SizedBox(height: 10,),
               buidProfile(profilePic: "https://shopnow.uuizard.com/wp-content/uploads/2022/08/289608930_886445685649687_1581133736543334273_n.jpg",
                   name: "Arfan Islam Redowan", roll: "136079", profileLink: ""),
-              buidProfile(profilePic: "https://static-01.daraz.com.bd/p/6beb1c849ffcfdde52a446632446a045.jpg", name: "Israt Jahan Nessa", roll: "136057", profileLink: "")
-              
+              SizedBox(height: 10,),
+              buidProfile(profilePic: "https://static-01.daraz.com.bd/p/6beb1c849ffcfdde52a446632446a045.jpg", name: "Israt Jahan Nessa", roll: "136057", profileLink: ""),
+              SizedBox(height: 10,),
           ],
         ),
       ),
@@ -122,8 +142,10 @@ class _TeamInfoState extends State<TeamInfo> {
           ),
           Card(
             child: ListTile(
-              selected: true,
-              onTap: () {},
+
+              onTap: () {
+                Get.to(Home());
+              },
               leading: Icon(Icons.home),
               title: Text("home"),
             ),
@@ -155,6 +177,7 @@ class _TeamInfoState extends State<TeamInfo> {
           ),
           Card(
             child: ListTile(
+              selected: true,
               onTap: (){
                 Get.to(TeamInfo());
               },
